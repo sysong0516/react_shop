@@ -7,14 +7,14 @@ let data = [
   },
 
   {
-    id:0,
+    id:1,
     title:'watermelon',
     content:'덜익은 수박 시큼하다',
     price:10000,
   },
 
   {
-    id:0,
+    id:2,
     title:'strawberry',
     content:'달달한 딸기',
     price:9000,

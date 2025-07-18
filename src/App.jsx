@@ -1,9 +1,10 @@
 import './App.css'
-import {Route, Routes} from 'react-router-dom';
-import MainPage from './pages/MainPage';
+import {Route, Routes} from 'react-router-dom'
+import MainPage from './pages/MainPage'
 import data from './mokData'
-import { useState } from 'react';
+import { useState } from 'react'
 import Header from './components/Header'
+import Detail from './pages/Detail'
 
 function App() {
   const [fruit, setFruit] = useState(data);
@@ -12,6 +13,7 @@ function App() {
       <Header/>
       <Routes>
         <Route path='/' element={<MainPage data={fruit}/>} />
+        <Route path='/detail/:id' element={<Detail fruit={fruit}/>} />
         <Route path='/test' element={<h1>테스트페이지</h1>}/>
       </Routes>
     </>
