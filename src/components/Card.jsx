@@ -6,7 +6,7 @@ function Card({fruit}) {
     <div className="col-md-4" onClick={()=>{
       navigate('/detail/'+fruit.id);
     }}>
-      <img src={`${import.meta.env.BASE_URL}img/${fruit.title}.jpg`} alt="" width='80%' />
+      <img src={`https://raw.githubusercontent.com/ghkdss/react_sample_data/main/img/${fruit.title}.jpg`} alt="" width='80%' />
       <h4>{fruit.title}</h4>
       <p>{fruit.content}</p>
     </div>

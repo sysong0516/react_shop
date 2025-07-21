@@ -3,3 +3,11 @@
   /* background-image:url('../../../img/watermelon.jpg'); */
   background-size: cover;
 }
+
+.App.b{
+  border: 1px solid red;
+}
+
+.container {
+  border: 1px solid blue;
+}

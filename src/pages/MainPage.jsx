@@ -5,7 +5,7 @@ function MainPage({data}){
 
   return(
     <>
-      <div className="main-bg" style={{ backgroundImage: 'url(' + bg + ')' }}></div>
+      <div className="main-bg" style={{ backgroundImage: 'url(' + bg + ')' , height:'300px', backgroundSize:'cover'}}></div>
       <div className="container">
         <div className="row">
           {
