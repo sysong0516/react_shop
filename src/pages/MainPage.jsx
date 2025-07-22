@@ -1,24 +1,35 @@
-import Card from '../components/Card'
-import bg from '../aa.jpg'
+import Card from "../components/Card"
+import bg from "../bg.jpg"
+import { useState } from "react";
 
-function MainPage({data}){
+function MainPage({ fruit }) {
+  const [fruitCount, setFruitCount] = useState(3);
+  const visibleFruit = fruit.slice(0, fruitCount);
 
-  return(
+  return (
     <>
-      <div className="main-bg" style={{ backgroundImage: 'url(' + bg + ')' , height:'300px', backgroundSize:'cover'}}></div>
+      <div className="main-bg" style={{ backgroundImage: 'url(' + bg + ')', height:'300px' }}></div>
+
       <div className="container">
         <div className="row">
           {
-            //data배열에 저장된 object를 순회한다. fr에 object를 한번씩 저장
-            data.map((fr,i) => {
+            visibleFruit.map((data, i) => {
               return (
-                //card.jsx의 매개변수 fruit로 fr전달
-                <Card fruit={fr}/>
+                <Card data={data} key={i} />
               )
             })
           }
         </div>
       </div>
+      
+      {
+        fruitCount > fruit.length ?
+        <div className="alert alert-danger">더이상 상품이 없습니다.</div>
+        :
+        <button onClick={() => {
+          setFruitCount(fruitCount + 3);
+        }}>3개 더보기</button>
+      }
     </>
   )
 }
