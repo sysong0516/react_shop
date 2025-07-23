@@ -23,7 +23,6 @@ function Header() {
     queryKey: ['userInfo'],
     queryFn: async () => {
       const response = await axios.get('https://raw.githubusercontent.com/ghkdss/react_sample_data/main/useinfo.json')
-      console.log(response)
 
       return response.data;
     },

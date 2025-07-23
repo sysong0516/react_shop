@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import TabContent from "../components/TabContent";
 import { useDispatch } from "react-redux";
 import { addCount, addItem, isDuplicate } from "../redux/cartSlice";
+import { setWatched } from "../redux/watchedSlice";
 
 function Detail({ fruit }) {
   const { id } = useParams();
@@ -46,6 +47,25 @@ function Detail({ fruit }) {
   if( !selectedFruit ) {
     return <div>해당 상품이 없습니다.</div>
   }
+
+  useEffect(()=>{
+    let watched = localStorage.getItem('watched');
+    watched=JSON.parse(watched);
+    
+    watched = [id, ...watched];
+
+    //Set() 중복을 제거하고 재구성해주는 객체
+    //Array.from() Set()객체를 다시 배열로 변환해준다
+    watched=new Set(watched);
+    watched=Array.from(watched);
+
+    if(watched.length===4){
+      watched.pop();
+    }
+
+    localStorage.setItem('watched', JSON.stringify(watched));
+    dispatch(setWatched(watched))
+  },[])
 
   return (
     <div className="container mt-3">

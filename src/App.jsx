@@ -1,14 +1,29 @@
 import style from './App.module.css'
 import data from './mokData'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import Header from './components/Header'
-import Detail from './pages/Detail'
-import About from './pages/About'
+// import Detail from './pages/Detail'
+// import About from './pages/About'
 import styled from 'styled-components'
 import axios from 'axios'
-import Cart from './pages/Cart'
+// import Cart from './pages/Cart'
+import WatchedProduct from './components/watchedProduct'
+import { useDispatch } from 'react-redux'
+import { setWatched } from './redux/watchedSlice'
+import { lazy } from 'react'
+import { setPageTitle } from './util/setTitle'
+// import test from './components/Test'
+
+//lazy import
+const Detail = lazy(()=>import('./pages/Detail'));
+
+const About = lazy(()=>import('./pages/About'));
+
+const Cart = lazy(()=>import('./pages/Cart'));
+
+
 
 // styled-component 기본 사용법
 // const 컴포넌트이름지정 = styled.태그명`
@@ -36,6 +51,7 @@ const Div = styled.div`
 
 function App() {
   const [fruit, setFruit] = useState([]);
+  const dispatch=useDispatch();
   
   useEffect(() => {
     axios.get('https://raw.githubusercontent.com/ghkdss/react_sample_data/main/fruit.json')
@@ -48,25 +64,45 @@ function App() {
       })
   }, [])
 
+  useEffect(()=>{
+    let watched = localStorage.getItem('watched');
+    watched = JSON.parse(watched);
+    if(!watched){
+        localStorage.setItem('watched', JSON.stringify([]));
+        dispatch(setWatched([]))
+    }else{
+      dispatch(setWatched(watched))
+    }
+  },[])
+
+  useEffect(()=>{
+    setPageTitle(`${id}번 상품`);
+  })
+  
+  if(fruit.length==0){
+    return <div>과일정보 불러오는중</div>
+  }
   return (
     <div className={style.container}>
+      <WatchedProduct fruit={fruit}/>
       <Header />
+      <Suspense fallback={<div>로딩中...</div>}>
+        <Routes>  
+          <Route path='/' element={<MainPage fruit={fruit} />} />
+          <Route path='/detail/:id' element={<Detail fruit={fruit} />} />
+          <Route path='/cart' element={<Cart />} />
+          {/* <Route path='/testg' element={<test />} /> */}
+          <Route path='/test' element={<h1>테스트페이지</h1>} />
 
-      <Routes>
-        <Route path='/' element={<MainPage fruit={fruit} />} />
-        <Route path='/detail/:id' element={<Detail fruit={fruit} />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/test' element={<h1>테스트페이지</h1>} />
+          <Route path='/about' element={<About />} >
+            <Route path='intro' element={<div>회사소개</div>} />
+            <Route path='history' element={<div>연혁</div>} />
+            <Route path='loc' element={<div>오시는 길</div>} />
+          </Route>
 
-        <Route path='/about' element={<About />} >
-          <Route path='intro' element={<div>회사소개</div>} />
-          <Route path='history' element={<div>연혁</div>} />
-          <Route path='loc' element={<div>오시는 길</div>} />
-        </Route>
-
-        <Route path='*' element={<h1>존재하지 않는 페이지</h1>} />
-      </Routes>
-
+          <Route path='*' element={<h1>존재하지 않는 페이지</h1>} />
+        </Routes>
+      </Suspense>
       <button onClick={() => {
         axios.get('https://raw.githubusercontent.com/ghkdss/react_sample_data/main/morefruit.json')
           .then(response => {
